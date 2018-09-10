@@ -73,7 +73,7 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
       δ' : Subset Q × Σ → Subset Q
       δ' (Q , t) = λ x → δ (x , t) x
 
--- Returns the reachable part of a DFA.
+-- Returns the sub-DFA that consists of the set of reachable states.
 reach : DFA → DFA
 reach record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
   record { Q = Q' ; Σ = Σ ; δ = δ' ; q₀ = q₀ ; F = F ; F? = F? }
