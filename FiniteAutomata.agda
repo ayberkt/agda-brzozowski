@@ -1,12 +1,11 @@
 module FiniteAutomata where
 
-open import Data.List
-open import Data.Product using (_×_; _,_)
-open import Data.Unit    using (⊤)
 open import Relation.Binary.PropositionalEquality
 open import Relation.Unary
+open import Data.List
+open import Data.Product     using (_×_; _,_)
+open import Data.Unit        using (⊤)
 open import Relation.Nullary using (yes; no)
-
 open import Subset using (Subset)
 open import Level  using (suc; Level)
 
