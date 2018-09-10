@@ -63,9 +63,10 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
     ; Σ = Σ              -- the alphabet is unchanged.
     ; δ = δ'             -- the new transition function defined in the where clause.
     ; q₀ = λ x → x ≡ q₀ -- the singleton set containing the start state.
+    -- F delineates sets that contain at least one final state.
     ; F = λ U → Lift (Data.Product.Σ Q (λ y → U y × F y))
-      -- F delineates sets that contain at least one final state.
-    ; F? = {!!}          -- proof that F is a decidable subset.
+    ; F? = {!!}
+    -- proof that F is a decidable subset.
     }
     where
       -- The new transition function.
