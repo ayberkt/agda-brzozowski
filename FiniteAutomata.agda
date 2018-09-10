@@ -43,6 +43,9 @@ to-nfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
 flip-relation : ∀ {A B : Set} → (A × B → Subset A) → (A × B → Subset A)
 flip-relation {A} {B} R = R-inv
   where
+    -- R-inv is a new relation that gives the opposite set of states, that is,
+    -- q ∈ R(p, t) holds iff there is a transition to q from p via t and
+    -- q ∈ R-inv(p, t) holds iff p ∈ R(q, t) so the transitions are *flipped*.
     R-inv : A × B → Subset A
     R-inv (p , t) = λ q → (R (q , t)) p
 
