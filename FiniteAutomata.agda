@@ -1,7 +1,7 @@
 module FiniteAutomata where
 
 open import Relation.Binary.PropositionalEquality
-open import Relation.Unary
+open import Relation.Unary   using (Decidable)
 open import Data.List
 open import Data.Product     using (_×_; _,_)
 open import Data.Unit        using (⊤)
@@ -70,3 +70,13 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
       -- The new transition function.
       δ' : Subset Q × Σ → Subset Q
       δ' (Q , t) = λ x → δ (x , t) x
+
+-- Returns the reachable part of a DFA.
+reach : DFA → DFA
+reach record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
+  record { Q = Q' ; Σ = Σ ; δ = δ' ; q₀ = q₀ ; F = F ; F? = F? }
+    where
+      Q' : Set
+      Q' = {!!}
+      δ' : Q' × Σ → Q
+      δ' = {!!}
