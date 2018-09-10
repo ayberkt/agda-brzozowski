@@ -7,7 +7,7 @@ open import Data.Product     using (_×_; _,_)
 open import Data.Unit        using (⊤)
 open import Relation.Nullary using (yes; no)
 open import Subset using (Subset)
-open import Level  using (suc; Level)
+open import Level  using (suc; Level; Lift)
 
 record DFA {l : Level} : Set (suc l) where
   field
@@ -62,7 +62,8 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
     ; Σ = Σ              -- the alphabet is unchanged.
     ; δ = δ'             -- the new transition function defined in the where clause.
     ; q₀ = λ x → x ≡ q₀ -- the singleton set containing the start state.
-    ; F = λ U → {!!}    -- F delineates sets that contain at least one final state.
+    ; F = λ U → Lift (Data.Product.Σ Q (λ y → U y × F y))
+      -- F delineates sets that contain at least one final state.
     ; F? = {!!}          -- proof that F is a decidable subset.
     }
     where
