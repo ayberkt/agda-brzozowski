@@ -1,14 +1,14 @@
 module FiniteAutomata where
 
 open import Relation.Binary.PropositionalEquality
-open import Relation.Unary   using (Decidable)
 open import Data.List
+open import Relation.Nullary using (yes; no)
+open import Relation.Unary   using (Decidable)
 open import Data.Product     using (_×_; _,_)
 open import Data.Unit        using (⊤)
 open import Function         using (_∘_)
-open import Relation.Nullary using (yes; no)
-open import Subset using (Subset)
-open import Level  using (suc; Level; Lift)
+open import Subset           using (Subset)
+open import Level            using (suc; Level; Lift)
 
 record DFA {l : Level} : Set (suc l) where
   field
@@ -45,6 +45,7 @@ flip-relation {A} {B} R = R-inv
   where
     -- R-inv is a new relation that gives the opposite set of states, that is,
     -- q ∈ R(p, t) holds iff there is a transition to q from p via t and
+
     -- q ∈ R-inv(p, t) holds iff p ∈ R(q, t) so the transitions are *flipped*.
     R-inv : A × B → Subset A
     R-inv (p , t) = λ q → (R (q , t)) p
