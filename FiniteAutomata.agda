@@ -74,6 +74,14 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
       δ' : Subset Q × Σ → Subset Q
       δ' (Q , t) = λ x → δ (x , t) x
 
+data is-reachable (M : DFA) : (DFA.Q M) → Set where
+  start-reachable   : is-reachable M (DFA.q₀ M)
+  further-reachable : ∀ {p : DFA.Q M}
+                   → (q : DFA.Q M)
+                   → is-reachable M q
+                   → Data.Product.Σ (DFA.Σ M) (λ t → ((DFA.δ M) (q , t)) ≡ p)
+                   → is-reachable M p
+
 -- Returns the sub-DFA that consists of the set of reachable states.
 reach : DFA → DFA
 reach record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
