@@ -84,10 +84,12 @@ data is-reachable (M : DFA) : (DFA.Q M) → Set where
 
 -- Returns the sub-DFA that consists of the set of reachable states.
 reach : DFA → DFA
-reach record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
-  record { Q = Q' ; Σ = Σ ; δ = δ' ; q₀ = q₀ ; F = F ; F? = F? }
+reach M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? }) =
+  record { Q = Q' ; Σ = Σ ; δ = δ' ; q₀ = (q₀ , start-reachable) ; F = F' ; F? = {!!} }
     where
       Q' : Set
-      Q' = {!!}
-      δ' : Q' × Σ → Q
-      δ' = {!!}
+      Q' = Data.Product.Σ Q (λ p → is-reachable M p)
+      δ' : Q' × Σ → Q'
+      δ' ((p , p-reachable) , t) = δ (p , t) , further-reachable p p-reachable (t , refl)
+      F' : Q' → Set
+      F' (p , p-reach) = F p
