@@ -4,7 +4,7 @@ open import Relation.Binary.PropositionalEquality
 open import Data.List
 open import Relation.Nullary using (yes; no)
 open import Relation.Unary   using (Decidable)
-open import Data.Product     using (_×_; _,_)
+open import Data.Product     using (_×_; _,_; Σ-syntax)
 open import Data.Unit        using (⊤)
 open import Function         using (_∘_)
 open import Subset           using (Subset)
@@ -53,8 +53,7 @@ flip-relation {A} {B} R = R-inv
 -- Reverse transitions of a DFA by using `flip-relation` on its transition
 -- relation.
 rev : NFA → NFA
-rev record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
-  record { Q = Q ; Σ = Σ ; δ = flip-relation δ ; q₀ = q₀ ; F = F ; F? = F? }
+rev M = record M { δ = flip-relation (NFA.δ M) }
 
 to-dfa : NFA → DFA
 to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
@@ -65,7 +64,7 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
     ; δ = δ'             -- the new transition function defined in the where clause.
     ; q₀ = λ x → x ≡ q₀ -- the singleton set containing the start state.
     -- F delineates sets that contain at least one final state.
-    ; F = λ U → (Data.Product.Σ Q (λ y → U y × F y))
+    ; F = λ U → Σ[ y ∈ Q ] (U y × F y)
     ; F? = {!!}
     -- proof that F is a decidable subset.
     }
@@ -86,7 +85,7 @@ data is-reachable (M : DFA) : (DFA.Q M) → Set where
   further-reachable : ∀ {p : DFA.Q M}
                    → (q : DFA.Q M)
                    → is-reachable M q
-                   → Data.Product.Σ (DFA.Σ M) (λ t → ((DFA.δ M) (q , t)) ≡ p)
+                   → Σ[ t ∈ (DFA.Σ M) ] (DFA.δ M) (q , t) ≡ p
                    → is-reachable M p
 
 -- Returns the sub-DFA that consists of the set of reachable states.
@@ -95,7 +94,7 @@ reach M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? }) =
   record { Q = Q' ; Σ = Σ ; δ = δ' ; q₀ = (q₀ , start-reachable) ; F = F' ; F? = {!!} }
     where
       Q' : Set
-      Q' = Data.Product.Σ Q (λ p → is-reachable M p)
+      Q' = Σ[ p ∈ Q ] (is-reachable M p)
       δ' : Q' × Σ → Q'
       δ' ((p , p-reachable) , t) = δ (p , t) , further-reachable p p-reachable (t , refl)
       F' : Q' → Set
