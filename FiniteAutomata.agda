@@ -93,3 +93,6 @@ reach M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? }) =
       δ' ((p , p-reachable) , t) = δ (p , t) , further-reachable p p-reachable (t , refl)
       F' : Q' → Set
       F' (p , p-reach) = F p
+
+-- TODO: Brzozowski's algorithm will look something like the following.
+-- brzozowski = reach ∘ to-dfa ∘ rev ∘ reach ∘ to-dfa ∘ rev
