@@ -53,8 +53,7 @@ flip-relation {A} {B} R = R-inv
 -- Reverse transitions of a DFA by using `flip-relation` on its transition
 -- relation.
 rev : NFA → NFA
-rev record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
-  record { Q = Q ; Σ = Σ ; δ = flip-relation δ ; q₀ = q₀ ; F = F ; F? = F? }
+rev M = record M { δ = flip-relation (NFA.δ M) }
 
 to-dfa : NFA → DFA
 to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
