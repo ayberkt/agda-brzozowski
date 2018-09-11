@@ -56,7 +56,7 @@ rev : NFA → NFA
 rev record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
   record { Q = Q ; Σ = Σ ; δ = flip-relation δ ; q₀ = q₀ ; F = F ; F? = F? }
 
-to-dfa : ∀ {l : Level} → NFA {l} → DFA {suc l}
+to-dfa : NFA → DFA
 to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
   record
     {
@@ -65,7 +65,7 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
     ; δ = δ'             -- the new transition function defined in the where clause.
     ; q₀ = λ x → x ≡ q₀ -- the singleton set containing the start state.
     -- F delineates sets that contain at least one final state.
-    ; F = λ U → Lift (Data.Product.Σ Q (λ y → U y × F y))
+    ; F = λ U → (Data.Product.Σ Q (λ y → U y × F y))
     ; F? = {!!}
     -- proof that F is a decidable subset.
     }
