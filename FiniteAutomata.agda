@@ -75,7 +75,13 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
       δ' (Q , t) = λ x → δ (x , t) x
 
 data is-reachable (M : DFA) : (DFA.Q M) → Set where
+  -- The start state is reachable by definition.
   start-reachable   : is-reachable M (DFA.q₀ M)
+  -- To construct an inhabitant of `is-reachable M p` with `further-reachable`
+  -- we need three things: (1) some state `q`, (2) a proof that `q` is
+  -- reachable, and (3) the existence of a transition `t` taking which on `q`
+  -- leads to `p`. In the presence of these three, `further-reachable` witnesses
+  -- the fact that `p` is reachable.
   further-reachable : ∀ {p : DFA.Q M}
                    → (q : DFA.Q M)
                    → is-reachable M q
