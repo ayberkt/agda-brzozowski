@@ -1,7 +1,7 @@
 module FiniteAutomata where
 
 open import Relation.Binary.PropositionalEquality
-open import Data.List
+open import Data.List        using (List; []; _∷_)
 open import Relation.Nullary using (yes; no)
 open import Relation.Unary   using (Decidable)
 open import Data.Product     using (_×_; _,_; Σ-syntax)
@@ -102,3 +102,14 @@ reach M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? }) =
 
 -- TODO: Brzozowski's algorithm will look something like the following.
 -- brzozowski = reach ∘ to-dfa ∘ rev ∘ reach ∘ to-dfa ∘ rev
+
+accepts-rec : ∀ {l : Level} → (M : DFA{l}) → (DFA.Q M) → List (DFA.Σ M) → Set
+accepts-rec M p [] = (DFA.F M) p
+accepts-rec M p (c ∷ cs) = accepts-rec M ((DFA.δ M) (p , c)) cs
+
+_accepts_ : ∀ {l : Level} → (M : DFA{l}) → List (DFA.Σ M) → Set
+M accepts s = accepts-rec M (DFA.q₀ M) s
+
+-- ℒ M: the set of all strings accepted by DFA M.
+ℒ : ∀ {l : Level} (M : DFA{l}) → Set
+ℒ M = Σ[ s ∈ List (DFA.Σ M) ] (M accepts s)
