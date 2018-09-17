@@ -19,13 +19,13 @@ record DFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
     F   : Subset l₂ Q
     F?  : Decidable F
 
-record NFA {l : Level} : Set (suc l) where
+record NFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
   field
-    Q   : Set l
+    Q   : Set l₁
     Σ   : Set
-    δ   : Q × Σ → Subset Q
+    δ   : Q × Σ → Subset l₁ Q
     q₀  : Q
-    F   : Subset Q
+    F   : Subset l₂ Q
     F?  : Decidable F
 
 -- Takes a function f : A → B and returns a relation R(x, y) that is inhabited
