@@ -56,11 +56,11 @@ flip-relation {l₁} {l₂} {A} {B} R = R-inv
 rev : ∀ {l₁ l₂ : Level} → NFA {l₁} {l₂} → NFA {l₁} {l₂}
 rev M = record M { δ = flip-relation (NFA.δ M) }
 
-to-dfa : NFA → DFA
-to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
+to-dfa : ∀ {l₁ l₂ : Level} → NFA {l₁} {l₂} → DFA {suc l₁} {l₁ ⊔ l₂}
+to-dfa {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
   record
     {
-      Q = Subset Q       -- new set of states is the set of all subsets of Q.
+      Q = Subset l₁ Q -- new set of states is the set of all subsets of Q.
     ; Σ = Σ              -- the alphabet is unchanged.
     ; δ = δ'             -- the new transition function defined in the where clause.
     ; q₀ = λ x → x ≡ q₀ -- the singleton set containing the start state.
@@ -72,7 +72,7 @@ to-dfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
     where
       -- The new transition function.
       -- δ (Q' , t) must be { p | ∃q∈Q'.q has a transition to p }
-      δ' : Subset Q × Σ → Subset Q
+      δ' : Subset l₁ Q × Σ → Subset l₁ Q
       δ' (Q' , t) = λ p → Σ[ q ∈ Q ] (Q' q × δ (q , t) p)
 
 data is-reachable (M : DFA) : (DFA.Q M) → Set where
