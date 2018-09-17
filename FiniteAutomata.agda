@@ -90,15 +90,15 @@ data is-reachable {l₁ l₂ : Level} (M : DFA{l₁}{l₂}) : (DFA.Q M) → Set 
                    → is-reachable M p
 
 -- Returns the sub-DFA that consists of the set of reachable states.
-reach : DFA → DFA
-reach M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? }) =
+reach : ∀ {l₁ l₂ : Level} → DFA {l₁} {l₂} → DFA {l₁} {l₂}
+reach {l₁} {l₂} M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? }) =
   record { Q = Q' ; Σ = Σ ; δ = δ' ; q₀ = (q₀ , start-reachable) ; F = F' ; F? = {!!} }
     where
-      Q' : Set
+      Q' : Set l₁
       Q' = Σ[ p ∈ Q ] (is-reachable M p)
       δ' : Q' × Σ → Q'
       δ' ((p , p-reachable) , t) = δ (p , t) , further-reachable p p-reachable (t , refl)
-      F' : Q' → Set
+      F' : Q' → Set l₂
       F' (p , p-reach) = F p
 
 -- TODO: Brzozowski's algorithm will look something like the following.
