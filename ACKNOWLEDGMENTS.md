@@ -1,1 +1,1 @@
-Thanks to Fabian Ruch for his suggestions and Agda help.
+Thanks to Fabian Ruch and Andrea Vezzosi for their suggestions and Agda help.
