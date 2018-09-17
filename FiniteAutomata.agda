@@ -102,11 +102,15 @@ reach {l₁} {l₂} M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F 
       F' : Q' → Set l₂
       F' (p , p-reach) = F p
 
-accepts-rec : ∀ {l : Level} → (M : DFA{l}) → (DFA.Q M) → List (DFA.Σ M) → Set
+accepts-rec : ∀ {l₁ l₂ : Level}
+           → (M : DFA{l₁}{l₂})
+           → (DFA.Q M)
+           → List (DFA.Σ M)
+           → Set l₂
 accepts-rec M p [] = (DFA.F M) p
 accepts-rec M p (c ∷ cs) = accepts-rec M ((DFA.δ M) (p , c)) cs
 
-_accepts_ : ∀ {l : Level} → (M : DFA{l}) → List (DFA.Σ M) → Set
+_accepts_ : ∀ {l₁ l₂ : Level} → (M : DFA{l₁}{l₂}) → List (DFA.Σ M) → Set l₂
 M accepts s = accepts-rec M (DFA.q₀ M) s
 
 -- ℒ M: the set of all strings accepted by DFA M.
@@ -115,3 +119,15 @@ M accepts s = accepts-rec M (DFA.q₀ M) s
 
 brzozowski : ∀ {l₁ l₂} → DFA {l₁} {l₂} → DFA {suc (suc l₁)} {l₂ ⊔ suc l₁}
 brzozowski m = reach (to-dfa (rev (to-nfa (reach (to-dfa (rev (to-nfa m)))))))
+
+brzozowski-same-lang-⇒ : ∀ {l₁ l₂} (M : DFA {l₁} {l₂}) (s : List (DFA.Σ M))
+                    → M accepts s
+                    → (brzozowski M) accepts s
+brzozowski-same-lang-⇒ M [] p =
+  ((λ x → x ≡ (DFA.q₀ M)) , start-reachable) , refl , (DFA.q₀ M , refl , p)
+brzozowski-same-lang-⇒ M (x₁ ∷ s) x = {!!}
+
+brzozowski-same-lang-⇐ : ∀ {l₁ l₂} (M : DFA {l₁} {l₂}) (s : List (DFA.Σ M))
+                       → (brzozowski M) accepts s
+                       → M accepts s
+brzozowski-same-lang-⇐ M s x = {!!}
