@@ -114,3 +114,6 @@ M accepts s = accepts-rec M (DFA.q₀ M) s
 -- ℒ M: the set of all strings accepted by DFA M.
 ℒ : ∀ {l : Level} (M : DFA{l}) → Set
 ℒ M = Σ[ s ∈ List (DFA.Σ M) ] (M accepts s)
+
+brzozowski : ∀ {l₁ l₂} → DFA {l₁} {l₂} → DFA {suc (suc l₁)} {l₂ ⊔ suc l₁}
+brzozowski m = reach (to-dfa (rev (to-nfa (reach (to-dfa (rev (to-nfa m)))))))
