@@ -75,7 +75,7 @@ to-dfa {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; 
       δ' : Subset l₁ Q × Σ → Subset l₁ Q
       δ' (Q' , t) = λ p → Σ[ q ∈ Q ] (Q' q × δ (q , t) p)
 
-data is-reachable (M : DFA) : (DFA.Q M) → Set where
+data is-reachable {l₁ l₂ : Level} (M : DFA{l₁}{l₂}) : (DFA.Q M) → Set (l₁) where
   -- The start state is reachable by definition.
   start-reachable   : is-reachable M (DFA.q₀ M)
   -- To construct an inhabitant of `is-reachable M p` with `further-reachable`
