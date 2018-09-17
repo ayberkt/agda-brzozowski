@@ -30,7 +30,8 @@ record NFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
 
 -- Takes a function f : A → B and returns a relation R(x, y) that is inhabited
 -- iff f x ≡ y represented as a function A → ℙ(B).
-to-relation : ∀ {A B : Set} → (f : A → B) → (A → Subset B)
+to-relation : ∀ {l₁ l₂ : Level} {A : Set l₁} {B : Set l₂}
+           → (f : A → B) → (A → Subset l₂ B)
 to-relation f a = λ x → x ≡ f a
 
 -- Inclusion for DFAs into NFAs simply by converting the function into a
