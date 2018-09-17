@@ -35,6 +35,7 @@ to-relation : ∀ {l₁ l₂ : Level} {A : Set l₁} {B : Set l₂}
 to-relation f a = λ x → x ≡ f a
 
 -- Inclusion for DFAs into NFAs simply by converting the function into a
+-- relation.
 to-nfa : ∀ {l₁ l₂ : Level} → DFA {l₁} {l₂} → NFA {l₁}
 to-nfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
   record { Q = Q ; Σ = Σ ; δ = to-relation δ ; q₀ = q₀ ; F = F ; F? = F? }
