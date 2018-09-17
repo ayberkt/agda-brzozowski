@@ -101,9 +101,6 @@ reach {l₁} {l₂} M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F 
       F' : Q' → Set l₂
       F' (p , p-reach) = F p
 
--- TODO: Brzozowski's algorithm will look something like the following.
--- brzozowski = reach ∘ to-dfa ∘ rev ∘ reach ∘ to-dfa ∘ rev
-
 accepts-rec : ∀ {l : Level} → (M : DFA{l}) → (DFA.Q M) → List (DFA.Σ M) → Set
 accepts-rec M p [] = (DFA.F M) p
 accepts-rec M p (c ∷ cs) = accepts-rec M ((DFA.δ M) (p , c)) cs
