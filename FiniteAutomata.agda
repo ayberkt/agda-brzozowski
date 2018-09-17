@@ -8,15 +8,15 @@ open import Data.Product     using (_×_; _,_; Σ-syntax)
 open import Data.Unit        using (⊤)
 open import Function         using (_∘_)
 open import Subset           using (Subset)
-open import Level            using (suc; Level; Lift)
+open import Level            using (suc; Level; Lift; _⊔_)
 
-record DFA {l : Level} : Set (suc l) where
+record DFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
   field
-    Q   : Set l
+    Q   : Set l₁
     Σ   : Set
     δ   : Q × Σ → Q
     q₀  : Q
-    F   : Subset Q
+    F   : Subset l₂ Q
     F?  : Decidable F
 
 record NFA {l : Level} : Set (suc l) where
