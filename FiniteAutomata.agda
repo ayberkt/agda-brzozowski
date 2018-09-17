@@ -125,7 +125,7 @@ brzozowski-same-lang-⇒ : ∀ {l₁ l₂} (M : DFA {l₁} {l₂}) (s : List (DF
                     → (brzozowski M) accepts s
 brzozowski-same-lang-⇒ M [] p =
   ((λ x → x ≡ (DFA.q₀ M)) , start-reachable) , refl , (DFA.q₀ M , refl , p)
-brzozowski-same-lang-⇒ M (x₁ ∷ s) x = {!!}
+brzozowski-same-lang-⇒ M (c ∷ cs) x = {!!}
 
 brzozowski-same-lang-⇐ : ∀ {l₁ l₂} (M : DFA {l₁} {l₂}) (s : List (DFA.Σ M))
                        → (brzozowski M) accepts s
