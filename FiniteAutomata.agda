@@ -32,16 +32,16 @@ record NFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
 
 -- Takes a function f : A → B and returns a relation R(x, y) that is inhabited
 -- iff f x ≡ y represented as a function A → ℙ(B).
-to-relation : ∀ {l₁ : Level} {A : Set l₁} {B : Set}
+non-deterministic : ∀ {l₁ : Level} {A : Set l₁} {B : Set}
            → (f : A × B → A) → (A × Maybe B → Subset l₁ A)
-to-relation f (a , just b)  = λ x → f (a , b) ≡ x
-to-relation f (a , nothing) = λ x → Lift ⊥
+non-deterministic f (a , just b)  = λ x → f (a , b) ≡ x
+non-deterministic f (a , nothing) = λ x → Lift ⊥
 
 -- Inclusion for DFAs into NFAs simply by converting the function into a
 -- relation.
 to-nfa : ∀ {l₁ l₂ : Level} → DFA {l₁} {l₂} → NFA {l₁}
 to-nfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
-  record { Q = Q ; Σ = Σ ; δ = to-relation δ ; q₀ = q₀ ; F = F ; F? = F? }
+  record { Q = Q ; Σ = Σ ; δ = non-deterministic δ ; q₀ = q₀ ; F = F ; F? = F? }
 
 -- NFA reversal.
 flip-relation : ∀  {l₁ l₂ : Level} {A : Set l₁} {B : Set l₂}
