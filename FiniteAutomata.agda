@@ -55,6 +55,12 @@ flip-relation {l₁} {l₂} {A} {B} R = R-inv
     R-inv : A × B → Subset l₁ A
     R-inv (p , t) = λ q → (R (q , t)) p
 
+-- Augment a given set of states with a new start state "★".
+-- `inj` injects the given states to the new set.
+data [_]+★ {l : Level} (Q : Set l) : Set l where
+  inj : Q → [ Q ]+★
+  ★  : [ Q ]+★
+
 -- Reverse transitions of a DFA by using `flip-relation` on its transition
 -- relation.
 rev : ∀ {l₁ l₂ : Level} → NFA {l₁} {l₂} → NFA {l₁} {l₂}
