@@ -7,6 +7,7 @@ open import Relation.Nullary using (yes; no)
 open import Relation.Unary   using (Decidable)
 open import Data.Product     using (_×_; _,_; Σ-syntax)
 open import Data.Unit        using (⊤)
+open import Data.Empty       using (⊥)
 open import Function         using (_∘_)
 open import Subset           using (Subset)
 open import Level            using (suc; Level; Lift; _⊔_)
@@ -31,9 +32,10 @@ record NFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
 
 -- Takes a function f : A → B and returns a relation R(x, y) that is inhabited
 -- iff f x ≡ y represented as a function A → ℙ(B).
-to-relation : ∀ {l₁ l₂ : Level} {A : Set l₁} {B : Set l₂}
-           → (f : A → B) → (A → Subset l₂ B)
-to-relation f a = λ x → x ≡ f a
+to-relation : ∀ {l₁ : Level} {A : Set l₁} {B : Set}
+           → (f : A × B → A) → (A × Maybe B → Subset l₁ A)
+to-relation f (a , just b)  = λ x → f (a , b) ≡ x
+to-relation f (a , nothing) = λ x → Lift ⊥
 
 -- Inclusion for DFAs into NFAs simply by converting the function into a
 -- relation.
