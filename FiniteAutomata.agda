@@ -143,11 +143,9 @@ brzozowski : ∀ {l₁ l₂} → DFA {l₁} {l₂} → DFA {suc (suc l₁)} {l�
 brzozowski m = reach (to-dfa (rev (to-nfa (reach (to-dfa (rev (to-nfa m)))))))
 
 brzozowski-same-lang-⇒ : ∀ {l₁ l₂} (M : DFA {l₁} {l₂}) (s : List (DFA.Σ M))
-                    → M accepts s
-                    → (brzozowski M) accepts s
-brzozowski-same-lang-⇒ M [] p =
-  ((λ x → x ≡ (DFA.q₀ M)) , start-reachable) , refl , (DFA.q₀ M , refl , p)
-brzozowski-same-lang-⇒ M (c ∷ cs) x = {!!}
+                       → M accepts s
+                       → (brzozowski M) accepts s
+brzozowski-same-lang-⇒ M s p = {!!}
 
 brzozowski-same-lang-⇐ : ∀ {l₁ l₂} (M : DFA {l₁} {l₂}) (s : List (DFA.Σ M))
                        → (brzozowski M) accepts s
