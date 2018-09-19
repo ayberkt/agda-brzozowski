@@ -33,7 +33,7 @@ record NFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
 -- Takes a function f : A → B and returns a relation R(x, y) that is inhabited
 -- iff f x ≡ y represented as a function A → ℙ(B).
 non-deterministic : ∀ {l₁ : Level} {A : Set l₁} {B : Set}
-           → (f : A × B → A) → (A × Maybe B → Subset l₁ A)
+                 → (f : A × B → A) → (A × Maybe B → Subset l₁ A)
 non-deterministic f (a , just b)  = λ x → f (a , b) ≡ x
 non-deterministic f (a , nothing) = λ x → Lift ⊥
 
