@@ -19,7 +19,6 @@ record DFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
     δ   : Q × Σ → Q
     q₀  : Q
     F   : Subset l₂ Q
-    F?  : Decidable F
 
 record NFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
   field
@@ -28,7 +27,6 @@ record NFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
     δ   : Q × Maybe Σ → Subset l₁ Q
     q₀  : Q
     F   : Subset l₂ Q
-    F?  : Decidable F
 
 -- Takes a function f : A → B and returns a relation R(x, y) that is inhabited
 -- iff f x ≡ y represented as a function A → ℙ(B).
@@ -40,8 +38,8 @@ non-deterministic f (a , nothing) = λ x → Lift ⊥
 -- Inclusion for DFAs into NFAs simply by converting the function into a
 -- relation.
 to-nfa : ∀ {l₁ l₂ : Level} → DFA {l₁} {l₂} → NFA {l₁}
-to-nfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
-  record { Q = Q ; Σ = Σ ; δ = non-deterministic δ ; q₀ = q₀ ; F = F ; F? = F? }
+to-nfa record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F } =
+  record { Q = Q ; Σ = Σ ; δ = non-deterministic δ ; q₀ = q₀ ; F = F }
 
 -- NFA reversal.
 flip-relation : ∀  {l₁ l₂ : Level} {A : Set l₁} {B : Set l₂}
@@ -64,8 +62,8 @@ data [_]+★ {l : Level} (Q : Set l) : Set l where
 -- Reverse transitions of a DFA by using `flip-relation` on its transition
 -- relation.
 rev : ∀ {l₁ l₂ : Level} → NFA {l₁} {l₂} → NFA {l₁} {l₂}
-rev {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
-  record { Q = [ Q ]+★ ; Σ = Σ ; δ = δ' ; q₀ = ★ ; F = {!!} ; F? = {!!} }
+rev {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F } =
+  record { Q = [ Q ]+★ ; Σ = Σ ; δ = δ' ; q₀ = ★ ; F = {!!} }
     where
       F' : Subset l₂ [ Q ]+★
       F' (inj q) = {!!} -- TODO: should be q ≡ q₀.
@@ -80,7 +78,7 @@ rev {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? 
       δ' (★    , t)       ★      = Lift ⊥
 
 to-dfa : ∀ {l₁ l₂ : Level} → NFA {l₁} {l₂} → DFA {suc l₁} {l₁ ⊔ l₂}
-to-dfa {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
+to-dfa {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F } =
   record
     {
       Q = Subset l₁ Q -- new set of states is the set of all subsets of Q.
@@ -89,8 +87,6 @@ to-dfa {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; 
     ; q₀ = λ x → x ≡ q₀ -- the singleton set containing the start state.
     -- F delineates sets that contain at least one final state.
     ; F = λ U → Σ[ y ∈ Q ] (U y × F y)
-    ; F? = {!!}
-    -- proof that F is a decidable subset.
     }
     where
       -- The new transition function.
@@ -114,8 +110,8 @@ data is-reachable {l₁ l₂ : Level} (M : DFA {l₁} {l₂}) : (DFA.Q M) → Se
 
 -- Returns the sub-DFA that consists of the set of reachable states.
 reach : ∀ {l₁ l₂ : Level} → DFA {l₁} {l₂} → DFA {l₁} {l₂}
-reach {l₁} {l₂} M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? }) =
-  record { Q = Q' ; Σ = Σ ; δ = δ' ; q₀ = (q₀ , start-reachable) ; F = F' ; F? = {!!} }
+reach {l₁} {l₂} M@(record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F }) =
+  record { Q = Q' ; Σ = Σ ; δ = δ' ; q₀ = (q₀ , start-reachable) ; F = F' }
     where
       Q' : Set l₁
       Q' = Σ[ p ∈ Q ] (is-reachable M p)
