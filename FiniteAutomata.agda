@@ -2,6 +2,7 @@ module FiniteAutomata where
 
 open import Relation.Binary.PropositionalEquality
 open import Data.List        using (List; []; _∷_)
+open import Data.Maybe       using (Maybe; just; nothing)
 open import Relation.Nullary using (yes; no)
 open import Relation.Unary   using (Decidable)
 open import Data.Product     using (_×_; _,_; Σ-syntax)
@@ -23,7 +24,7 @@ record NFA {l₁ l₂ : Level} : Set (suc (l₁ ⊔ l₂)) where
   field
     Q   : Set l₁
     Σ   : Set
-    δ   : Q × Σ → Subset l₁ Q
+    δ   : Q × Maybe Σ → Subset l₁ Q
     q₀  : Q
     F   : Subset l₂ Q
     F?  : Decidable F
