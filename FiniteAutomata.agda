@@ -64,7 +64,20 @@ data [_]+★ {l : Level} (Q : Set l) : Set l where
 -- Reverse transitions of a DFA by using `flip-relation` on its transition
 -- relation.
 rev : ∀ {l₁ l₂ : Level} → NFA {l₁} {l₂} → NFA {l₁} {l₂}
-rev M = record M { δ = flip-relation (NFA.δ M) }
+rev {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
+  record { Q = [ Q ]+★ ; Σ = Σ ; δ = δ' ; q₀ = ★ ; F = {!!} ; F? = {!!} }
+    where
+      F' : Subset l₂ [ Q ]+★
+      F' (inj q) = {!!} -- TODO: should be q ≡ q₀.
+      F' ★      = Lift ⊥
+      δ' : [ Q ]+★ × Maybe Σ → Subset l₁ ([ Q ]+★)
+      δ' (inj p , t)       (inj q) = (δ (q , t)) p
+      δ' (inj p , t)       ★      = Lift ⊥
+      δ' (★    , just t)  (inj q) = Lift ⊥
+      -- TODO: the following case should add ε transitions to the final states
+      -- of the given NFA.
+      δ' (★    , nothing) (inj q) = {!!} -- should be F q
+      δ' (★    , t)       ★      = Lift ⊥
 
 to-dfa : ∀ {l₁ l₂ : Level} → NFA {l₁} {l₂} → DFA {suc l₁} {l₁ ⊔ l₂}
 to-dfa {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; F? = F? } =
