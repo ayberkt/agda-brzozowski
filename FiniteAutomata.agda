@@ -77,7 +77,7 @@ to-dfa {l₁} {l₂} record { Q = Q ; Σ = Σ ; δ = δ ; q₀ = q₀ ; F = F ; 
       -- The new transition function.
       -- δ (Q' , t) must be { p | ∃q∈Q'.q has a transition to p }
       δ' : Subset l₁ Q × Σ → Subset l₁ Q
-      δ' (Q' , t) = λ p → Σ[ q ∈ Q ] (Q' q × δ (q , t) p)
+      δ' (Q' , t) = λ p → Σ[ q ∈ Q ] (Q' q × δ (q , just t) p)
 
 data is-reachable {l₁ l₂ : Level} (M : DFA{l₁}{l₂}) : (DFA.Q M) → Set (l₁) where
   -- The start state is reachable by definition.
