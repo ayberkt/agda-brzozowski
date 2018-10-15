@@ -18,6 +18,14 @@ foldr : ∀ {i} {A B : Set} → (A → B → B) → B → List i A → B
 foldr c n [] = n
 foldr c n (x ∷ xs) = c x (foldr c n xs)
 
+snoc : ∀ {i} {j : Size< i} {A : Set} → (x : A) → List j A → List i A
+snoc {i} {A} x' [] = x' ∷ []
+snoc x' (x ∷ xs)   = x ∷ (snoc x xs)
+
+rev : ∀ {i} {A : Set} → List i A → List i A
+rev [] = []
+rev (x ∷ xs) = snoc x (rev xs)
+
 map : ∀ {i A B} → (A → B) → List i A → List i B
 map f [] = []
 map f (x ∷ xs) = f x ∷ map f xs
