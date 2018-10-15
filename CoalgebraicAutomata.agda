@@ -39,6 +39,10 @@ record Lang i : Set where
     ν : 𝟚
     δ : ∀ {j : Size< i} → A → Lang j
 
+_∋_ : ∀ {i} → Lang i → List i A → 𝟚
+l ∋ [] = Lang.ν l
+l ∋ (a ∷ as) = Lang.δ l a ∋ as
+
 record DA (S : Set) : Set where
   field
     q₀ : 𝟙 → S
