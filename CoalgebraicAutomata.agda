@@ -103,7 +103,17 @@ pow : ∀ {S} → DA S → DA (S → 𝟚)
 pow {S} record { q₀ = q₀ ; ν = ν ; δ = δ } =
   record { q₀ = λ tt → ν   ; ν = 2^1=2 (contra-pow-functor q₀) ; δ = brzo δ }
 
-theorem-2-1 : ∀ {S X} → reachable {S} X → observable (pow X)
-theorem-2-1 = {!!}
+theorem-2-1 : ∀ {S da} → reachable {S} da → observable (pow da)
+theorem-2-1 {S} {da} f = {!!}
 
--- theorem-2-2 : ∀ {S X} →
+theorem-2-2-⇒ : ∀ {i S} {w : List i A} (da : DA S)
+              → lang {i} {S} da ((DA.q₀ da) tt) ∋ w ≡ true
+              → lang {i} {S → 𝟚} (pow da) (DA.q₀ (pow da) tt) ∋ (rev w) ≡ true
+theorem-2-2-⇒ da p = {!!}
+
+theorem-2-2-⇐ : ∀ {i S} (da : DA S)
+                → (w : List i A)
+                → lang {i} {S → 𝟚} (pow da) (DA.q₀ (pow da) tt) ∋ w ≡ true
+                → lang {i} {S} da ((DA.q₀ da) tt) ∋ (rev w) ≡ true
+theorem-2-2-⇐ da [] p = {!!}
+theorem-2-2-⇐ da (x ∷ w) p = {!!}
