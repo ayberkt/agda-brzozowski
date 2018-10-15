@@ -1,12 +1,11 @@
 module CoalgebraicAutomata (A : Set) where
 
-open import Data.Bool using (true; false; _∨_) renaming (Bool to 𝟚)
+open import Data.Bool using (true; false; _∨_; not) renaming (Bool to 𝟚)
 open import Size
 open import Relation.Binary.PropositionalEquality using (_≡_)
 open import Function.Surjection using (Surjective)
-open import Data.Product using (∃; _×_; _,_; uncurry)
+open import Data.Product using (∃; _×_; _,_; uncurry; Σ-syntax)
 open import Data.Unit    using (⊤; tt)
-open import Function
 
 𝟙 : Set
 𝟙 = ⊤
