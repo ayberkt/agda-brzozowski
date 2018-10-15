@@ -92,12 +92,12 @@ contra-pow-functor f g = λ v → g (f v)
 
 -- The main construction.
 brzo : ∀ {S : Set} → (t : S → A → S) → ((S → 𝟚) → (A → S → 𝟚))
-brzo {S} t = step-3
-  where
-    step-2 : (S → 𝟚) → (S × A → 𝟚)
-    step-2 = contra-pow-functor (uncurry t)
-    step-3 : (S → 𝟚) → (A → S → 𝟚)
-    step-3 f a s = step-2 f (s , a)
+brzo {S} t f a s = (contra-pow-functor (uncurry t)) f (s , a)
+  -- where
+    -- step-2 : (S → 𝟚) → (S × A → 𝟚)
+    -- step-2 = contra-pow-functor (uncurry t)
+    -- step-3 : (S → 𝟚) → (A → S → 𝟚)
+    -- step-3 f a s = step-2 f (s , a)
 
 pow : ∀ {S} → DA S → DA (S → 𝟚)
 pow {S} record { q₀ = q₀ ; ν = ν ; δ = δ } =
