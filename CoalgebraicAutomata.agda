@@ -64,8 +64,10 @@ record DA (S : Set) : Set where
   r : ∀ {i} → List i A → S
   r w = δ* (q₀ tt) w
 
-  o : ∀ {i} → S → (List i A → 𝟚)
-  o x w = ν (δ* x w)
+  o : ∀ {i} → S → Lang i
+  Lang.ν (o s)   = ν s
+  Lang.δ (o s) a = o (δ s a)
+  -- o x w = ν (δ* x w)
 
 -- Note that "M is reachable" if all states are reachable
 -- from the initial state.
@@ -82,10 +84,6 @@ reachable M = ∀ s → ∃[ as ](DA.r M as ≡ s)
 -- An observable automaton is minimal.
 observable : ∀ {S : Set} → DA S → Set
 observable M = ∀ s₀ s₁ → DA.o M s₀ ≡ DA.o M s₁ → DA.ν M s₀ ≡ DA.ν M s₁
-
-lang : ∀ {i} {S} (da : DA S) → S → Lang i
-Lang.ν (lang da s)   = DA.ν da s
-Lang.δ (lang da s) a = lang da (DA.δ da s a)
 
 𝟚^[_] : ∀ {V W : Set} → (f : V → W) → (W → 𝟚) → (V → 𝟚)
 𝟚^[ f ] g = λ v → g (f v)
@@ -105,13 +103,13 @@ theorem-2-1 : ∀ {S da} → reachable {S} da → observable (pow da)
 theorem-2-1 {S} {da} f = {!!}
 
 theorem-2-2-⇒ : ∀ {i S} {w : List i A} (da : DA S)
-              → lang {i} {S} da ((DA.q₀ da) tt) ∋ w ≡ true
-              → lang {i} {S → 𝟚} (pow da) (DA.q₀ (pow da) tt) ∋ (rev w) ≡ true
+              → DA.o da (DA.q₀ da tt) ∋ w ≡ true
+              → DA.o (pow da) (DA.q₀ (pow da) tt) ∋ (rev w) ≡ true
 theorem-2-2-⇒ da p = {!!}
 
 theorem-2-2-⇐ : ∀ {i S} (da : DA S)
                 → (w : List i A)
-                → lang {i} {S → 𝟚} (pow da) (DA.q₀ (pow da) tt) ∋ w ≡ true
-                → lang {i} {S} da ((DA.q₀ da) tt) ∋ (rev w) ≡ true
+                → DA.o (pow da) (DA.q₀ (pow da) tt) ∋ w ≡ true
+                → DA.o da (DA.q₀ da tt) ∋ (rev w) ≡ true
 theorem-2-2-⇐ da [] p = {!!}
-theorem-2-2-⇐ da (x ∷ w) p = {!!}
+theorem-2-2-⇐ da (a ∷ as) p = {!!}
