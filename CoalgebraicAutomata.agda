@@ -3,8 +3,7 @@ module CoalgebraicAutomata (A : Set) where
 open import Data.Bool using (true; false; _∨_; not) renaming (Bool to 𝟚)
 open import Size
 open import Relation.Binary.PropositionalEquality using (_≡_)
-open import Function.Surjection using (Surjective)
-open import Data.Product using (∃; _×_; _,_; uncurry; Σ-syntax)
+open import Data.Product using (∃; _×_; _,_; uncurry; Σ-syntax; ∃-syntax)
 open import Data.Unit    using (⊤; tt)
 
 𝟙 : Set
@@ -58,14 +57,14 @@ record DA (S : Set) : Set where
   δs ss a = map (λ s → δ s a) ss
 
   -- x_w in Bonsangue et al's notation.
-  δ* : ∀ {i} → (𝟙 → S) → List i A → S
-  δ* x []        = x tt
+  δ* : ∀ {i} → S → List i A → S
+  δ* x []        = x
   δ* x (t ∷ ts) = δ (δ* x ts) t
 
   r : ∀ {i} → List i A → S
-  r w = δ* q₀ w
+  r w = δ* (q₀ tt) w
 
-  o : ∀ {i} → (𝟙 → S) → (List i A → 𝟚)
+  o : ∀ {i} → S → (List i A → 𝟚)
   o x w = ν (δ* x w)
 
 -- Note that "M is reachable" if all states are reachable
@@ -76,9 +75,13 @@ reachable M = ∀ y → ∃ λ x → (DA.r M) x ≡ y
 -- "M is observable" if different states recognize different languages i.e., if
 -- they have different "observable behavior".
 --
+-- By asserting the injectivity of (DA.o M), we are really saying that "there are
+-- no two distinct states such that after applying all transitions in w, the output
+-- behavior of the resulting state is the same". This captures exactly minimality.
+--
 -- An observable automaton is minimal.
 observable : ∀ {S : Set} → DA S → Set
-observable M = ∀ {x₀ x₁} → (DA.o M) x₀ ≡ (DA.o M) x₀ → x₀ ≡ x₁
+observable M = ∀ s₀ s₁ → DA.o M s₀ ≡ DA.o M s₁ → DA.ν M s₀ ≡ DA.ν M s₁
 
 lang : ∀ {i} {S} (da : DA S) → S → Lang i
 Lang.ν (lang da s)   = DA.ν da s
