@@ -44,7 +44,7 @@ l ∋ (a ∷ as) = Lang.δ l a ∋ as
 
 record DA (S : Set) : Set where
   field
-    q₀ : 𝟙 → S
+    q₀ : S
     ν  : S → 𝟚
     δ  : S → A → S
 
@@ -62,7 +62,7 @@ record DA (S : Set) : Set where
   δ* x (t ∷ ts) = δ (δ* x ts) t
 
   r : ∀ {i} → List i A → S
-  r w = δ* (q₀ tt) w
+  r w = δ* q₀ w
 
   o : ∀ {i} → S → Lang i
   Lang.ν (o s)   = ν s
@@ -97,19 +97,19 @@ main {S} t f a s = 𝟚^[ uncurry t ] f (s , a)
 
 pow : ∀ {S} → DA S → DA (S → 𝟚)
 pow {S} record { q₀ = q₀ ; ν = ν ; δ = δ } =
-  record { q₀ = λ tt → ν ; ν = 2^1=2 𝟚^[ q₀ ] ; δ = main δ }
+  record { q₀ = ν ; ν = 2^1=2 𝟚^[ (λ tt → q₀) ] ; δ = main δ }
 
 theorem-2-1 : ∀ {S da} → reachable {S} da → observable (pow da)
 theorem-2-1 {S} {da} f = {!!}
 
 theorem-2-2-⇒ : ∀ {i S} {w : List i A} (da : DA S)
-              → DA.o da (DA.q₀ da tt) ∋ w ≡ true
-              → DA.o (pow da) (DA.q₀ (pow da) tt) ∋ (rev w) ≡ true
+              → DA.o da (DA.q₀ da) ∋ w ≡ true
+              → DA.o (pow da) (DA.q₀ (pow da)) ∋ (rev w) ≡ true
 theorem-2-2-⇒ da p = {!!}
 
 theorem-2-2-⇐ : ∀ {i S} (da : DA S)
                 → (w : List i A)
-                → DA.o (pow da) (DA.q₀ (pow da) tt) ∋ w ≡ true
-                → DA.o da (DA.q₀ da tt) ∋ (rev w) ≡ true
+                → DA.o (pow da) (DA.q₀ (pow da)) ∋ w ≡ true
+                → DA.o da (DA.q₀ da) ∋ (rev w) ≡ true
 theorem-2-2-⇐ da [] p = {!!}
 theorem-2-2-⇐ da (a ∷ as) p = {!!}
