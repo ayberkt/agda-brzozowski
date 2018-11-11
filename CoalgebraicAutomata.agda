@@ -87,24 +87,19 @@ lang : ∀ {i} {S} (da : DA S) → S → Lang i
 Lang.ν (lang da s)   = DA.ν da s
 Lang.δ (lang da s) a = lang da (DA.δ da s a)
 
-contra-pow-functor : ∀ {V W : Set} → (f : V → W) → (W → 𝟚) → (V → 𝟚)
-contra-pow-functor f g = λ v → g (f v)
+𝟚^[_] : ∀ {V W : Set} → (f : V → W) → (W → 𝟚) → (V → 𝟚)
+𝟚^[ f ] g = λ v → g (f v)
 
 2^1=2 : ∀ {A : Set} → (A → 𝟙 → 𝟚) → (A → 𝟚)
 2^1=2 f = λ x → f x tt
 
 -- The main construction.
-brzo : ∀ {S : Set} → (t : S → A → S) → ((S → 𝟚) → (A → S → 𝟚))
-brzo {S} t f a s = (contra-pow-functor (uncurry t)) f (s , a)
-  -- where
-    -- step-2 : (S → 𝟚) → (S × A → 𝟚)
-    -- step-2 = contra-pow-functor (uncurry t)
-    -- step-3 : (S → 𝟚) → (A → S → 𝟚)
-    -- step-3 f a s = step-2 f (s , a)
+main : ∀ {S : Set} → (t : S → A → S) → ((S → 𝟚) → (A → S → 𝟚))
+main {S} t f a s = 𝟚^[ uncurry t ] f (s , a)
 
 pow : ∀ {S} → DA S → DA (S → 𝟚)
 pow {S} record { q₀ = q₀ ; ν = ν ; δ = δ } =
-  record { q₀ = λ tt → ν   ; ν = 2^1=2 (contra-pow-functor q₀) ; δ = brzo δ }
+  record { q₀ = λ tt → ν ; ν = 2^1=2 𝟚^[ q₀ ] ; δ = main δ }
 
 theorem-2-1 : ∀ {S da} → reachable {S} da → observable (pow da)
 theorem-2-1 {S} {da} f = {!!}
