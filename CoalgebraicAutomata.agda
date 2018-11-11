@@ -70,7 +70,7 @@ record DA (S : Set) : Set where
 -- Note that "M is reachable" if all states are reachable
 -- from the initial state.
 reachable : ∀ {S : Set} → DA S → Set
-reachable M = ∀ y → ∃ λ x → (DA.r M) x ≡ y
+reachable M = ∀ s₁ → ∃[ s₀ ](DA.r s₀ ≡ s₁)
 
 -- "M is observable" if different states recognize different languages i.e., if
 -- they have different "observable behavior".
