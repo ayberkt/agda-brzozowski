@@ -49,12 +49,12 @@ record DA (S : Set) : Set where
     δ  : S → A → S
 
   -- A list of states is accepting if it contains at least one final state.
-  νs : ∀ {i} (ss : List i S) → 𝟚
-  νs ss = any ν ss
+  νs : ∀ {i} → List i S → 𝟚
+  νs as = any ν as
 
   -- We step to a new listo f states by pointwise applying the transition function.
-  δs : ∀ {i} (ss : List i S) → A → List i S
-  δs ss a = map (λ s → δ s a) ss
+  δs : ∀ {i} → List i S → A → List i S
+  δs as a = map (λ s → δ s a) as
 
   -- x_w in Bonsangue et al's notation.
   δ* : ∀ {i} → S → List i A → S
